@@ -1,6 +1,6 @@
 require 'net/http'
 require 'net/https'
-require 'crack'
+require 'json'
 
 module WHMCS
   # WHMCS::Base is the main class used to subclass WHMCS API resources
@@ -18,13 +18,14 @@ module WHMCS
       end
 
       params.merge!(
-        :username => WHMCS.config.api_username,
-        :password => WHMCS.config.api_password
+        username: WHMCS.config.api_username,
+        password: WHMCS.config.api_password,
+        responsetype: "json"
       )
 
       # alternative API access
       if( !WHMCS.config.api_key.nil? )
-        params.merge!( :accesskey => WHMCS.config.api_key )
+        params.merge!( accesskey: WHMCS.config.api_key )
       end
 
       url = URI.parse(WHMCS.config.api_url)
@@ -38,24 +39,11 @@ module WHMCS
       req = Net::HTTP::Post.new(url.path)
       req.set_form_data(params)
       res = http.start { |http| http.request(req) }
-      parse_response(res.body)
-    end
 
-    # Converts the API response to a Hash
-    def self.parse_response(raw)
-      result = {}
-      return result if raw.to_s.empty?
-      
-      if raw.match(/xml version/)
-        Crack::XML.parse(raw)
-      else
-        # in case of password encrypt/decrypt - '=' should be properly parsed
-        raw.split(';').map do |line|
-          m = /^(\w+)\=(.*)$/.match(line)
-          result[ m[1] ] = m[2]
-        end
-        result
+      if !res.is_a?(Net::HTTPSuccess)
+        raise "Bad response from server:\n#{res.body}"
       end
+      JSON.parse res.body, symbolize_names: true
     end
   end
 end
