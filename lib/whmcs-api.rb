@@ -5,7 +5,7 @@ module WHMCS
   autoload :Client,       "whmcs/client"
   autoload :Domain,       "whmcs/domain"
   autoload :Invoice,      "whmcs/invoice"
-  autoload :Misc,         "whmcs/misc"
+  autoload :System,       "whmcs/system"
   autoload :Module,       "whmcs/module"
   autoload :Order,        "whmcs/order"
   autoload :Quote,        "whmcs/quote"
