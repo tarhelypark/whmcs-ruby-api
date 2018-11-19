@@ -1,5 +1,5 @@
 module WHMCS
-  # The WHMCS::Misc class contains miscelaneous WHMCS API functions
+  # The WHMCS::System class contains miscelaneous WHMCS API functions
   class Misc < Base
 
     # Get activity log
@@ -161,7 +161,7 @@ module WHMCS
 
     # Decrypt a string with the WHMCS algorithm
 		#
-		# This command is used to decrypt a string using the WHMCS encryption algorithm. 
+		# This command is used to decrypt a string using the WHMCS encryption algorithm.
 		# This cannot be used to decrypt the clients password when using the MD5 Client passwords.
     #
     # Parameters:
@@ -189,9 +189,9 @@ module WHMCS
 		# * <tt>:hidden</tt> - set true to hide
 		# * <tt>:showdomainoptions</tt> - set true to show
 		# * <tt>:welcomeemail</tt> - the email template ID for a welcome email
-		# * <tt>:qty</tt> - set quantity to enable stock control 
+		# * <tt>:qty</tt> - set quantity to enable stock control
 		# * <tt>:proratadate</tt>
-		# * <tt>:proratachargenextmonth</tt> 
+		# * <tt>:proratachargenextmonth</tt>
 		# * <tt>:autosetup</tt> - on, payment, order or blank for none
 		# * <tt>:module</tt> - module name
 		# * <tt>:servergroupid</tt> - server group ID
@@ -227,7 +227,7 @@ module WHMCS
 
 		# Add Banned IP
 		#
-		# Parameters: 
+		# Parameters:
 		# * <tt>:ip</tt> - IP address to ban
 		# Optional attributes:
 		# * <tt>:reason</tt> - reason for ban
@@ -246,7 +246,7 @@ module WHMCS
 		# This command is used to send an email to Admin users
 		#
 		# Parameters:
-		# * <tt>:messagename</tt> - Name of the Admin email template to send 
+		# * <tt>:messagename</tt> - Name of the Admin email template to send
 		# * <tt>:mergefields</tt> - array of merge fields to populate the template being sent
 		# * <tt>:type</tt> - Who to send the email to. One of system, account or support. Default: system
 		#
@@ -260,6 +260,11 @@ module WHMCS
 		# http://docs.whmcs.com/API:Send_Admin_Email
 		def self.send_admin_email(params = {})
 			params.merge!(:action => 'sendadminemail')
+			send_request(params)
+		end
+
+    def self.send_email(params = {})
+			params.merge!(:action => 'sendemail')
 			send_request(params)
 		end
   end
